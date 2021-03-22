@@ -130,5 +130,39 @@ public class InvoiceTest {
 		Assert.assertThat(number1, Matchers.lessThan(number2));
 	}
 
+	@Test
+	public void testProductListContainsProductName() {
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("5.50")));
+		Assert.assertTrue(invoice.getProductListAsString().contains("Mleko"));
+	}
+
+	@Test
+	public void testProductListContainsProductQuantity() {
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("5.50")), 4);
+		Assert.assertTrue(invoice.getProductListAsString().contains("4"));
+	}
+
+	@Test
+	public void testProductListEndsWithProperNumberOfItems() {
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("5.50")));
+		invoice.addProduct(new OtherProduct("Woda", new BigDecimal("3")));
+		Assert.assertTrue(invoice.getProductListAsString().endsWith("2"));
+	}
+
+	@Test
+	public void testInvoiceHasProperQuantityAfterAddingSameProduct() {
+		Product mleko = new DairyProduct("Mleko", new BigDecimal("5.50"));
+		invoice.addProduct(mleko, 4);
+		invoice.addProduct(mleko, 2);
+		Assert.assertTrue(invoice.getProductListAsString().contains("6"));
+	}
+
+	@Test
+	public void testProductListEndsWithProperNumberOfItemsAfterAddingSameProduct() {
+		Product mleko = new DairyProduct("Mleko", new BigDecimal("5.50"));
+		invoice.addProduct(mleko, 4);
+		invoice.addProduct(mleko, 2);
+		Assert.assertTrue(invoice.getProductListAsString().endsWith("1"));
+	}
 
 }
